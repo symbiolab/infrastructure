@@ -1,0 +1,67 @@
+services:
+  proxy:
+    image: traefik:latest
+    container_name: "traefik"
+    restart: unless-stopped
+    ports:
+      # The HTTP port
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./conf/proxy/traefik.yml:/traefik.yml:ro
+      - ./conf/proxy/traefik-dynamic-config.yml:/traefik-dynamic-config.yml:ro
+      - ~/ssl/acme.json:/acme.json
+    networks:
+      - frontend
+      - backend
+  cloudsymbiolab:
+    build: ./container/cloud.symbiolab.de
+    image: cloud.symbiolab.de:latest
+    volumes:
+      - /root/docker/data/cloud.symbiolab.de-data:/opt/cloud.symbiolab.de-data
+    links:
+      - centraldb
+      - redis
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=backend"
+      - "traefik.http.routers.cloudsymbiolab.rule=Host(`cloud.symbiolab.de`)"
+      - "traefik.http.routers.cloudsymbiolab.entrypoints=websecure"
+      - "traefik.http.routers.cloudsymbiolab.tls.certresolver=leresolver"
+      - "traefik.http.routers.cloudsymbiolab.middlewares=default@file"
+      - "traefik.http.routers.cloudsymbiolab.middlewares=nextcloud_redirectregex"
+      - "traefik.http.services.cloudsymbiolab.loadbalancer.server.port=80"
+      - "traefik.http.middlewares.nextcloud_redirectregex.redirectregex.permanent=true"
+      - "traefik.http.middlewares.nextcloud_redirectregex.redirectregex.regex='https://(.*)/.well-known/(?:card|cal)dav'"
+      - "traefik.http.middlewares.nextcloud_redirectregex.redirectregex.replacement='https://$${1}/remote.php/dav'"
+    networks:
+      - backend
+  centraldb:
+    build: ./container/centraldb
+    volumes:
+      - /root/docker/data/cloud.symbiolab.de-postgresdata:/var/lib/postgresql/data
+      - /root/docker/data/cloud.symbiolab.de-database:/opt/backup
+    env_file:
+      - .env
+    networks:
+      - backend
+  nextcloud:
+    build: ./container/nextcloud
+    image: nextcloud:latest
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - '6379:6379'
+    command: >
+      /bin/sh -c 'redis-server --appendonly yes --requirepass $$REDIS_PASSWORD'
+    env_file:
+      - .env
+    networks:
+      - backend
+networks:
+  frontend:
+    internal: false
+  backend:
+    internal: true

@@ -1,0 +1,41 @@
+# Logging configuration
+log:
+  level: WARN
+
+api:
+  dashboard: false
+providers:
+  docker:
+    network: backend
+    exposedByDefault: false
+    endpoint: "unix:///var/run/docker.sock"   # Listen to the UNIX Docker socket
+    swarmModeRefreshSeconds: 15               # Defines the polling interval (in seconds) in Swarm Mode.
+  file:
+    filename: "/traefik-dynamic-config.yml"  # Link to the dynamic configuration
+    watch: true                               # Watch for modifications
+  providersThrottleDuration: 10
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: "websecure"
+          scheme: "https"
+          permanent: true
+  websecure:
+    address: ":443"
+  streaming:
+    address: ":64738/udp"
+    udp:
+      timeout: "10s"
+  other:
+    address: ":64738"
+certificatesResolvers:
+    leresolver:
+      acme:
+        caServer: "https://acme-v02.api.letsencrypt.org/directory"
+        email: "ssl@symbiolab.de"
+        storage: "/acme.json"
+        httpChallenge:
+          entrypoint: web
