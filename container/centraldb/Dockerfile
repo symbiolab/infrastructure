@@ -6,6 +6,3 @@ COPY scripts/init-db.sh /docker-entrypoint-initdb.d/
 
 # Make the shell script executable
 RUN chmod +x /docker-entrypoint-initdb.d/init-db.sh
-
-# Override the default entrypoint to use the custom shell script
-ENTRYPOINT ["/docker-entrypoint-initdb.d/init-db.sh"]

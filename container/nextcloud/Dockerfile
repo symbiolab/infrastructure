@@ -16,28 +16,34 @@ RUN pacman --noconfirm -S \
 
 EXPOSE 80 80
 
+ARG CALENDAR_VERSION=v4.7.11
+ARG CONTACTS_VERSION=v6.0.0
+ARG DECK_VERSION=v1.13.1
+ARG RICHDOCUMENTS_VERSION=v8.4.3
+ARG POLLS_VERSION=7.1.4
+
 RUN cd /usr/share/webapps/nextcloud/apps/ && \
-    wget -O calendar.tar.gz https://github.com/nextcloud-releases/calendar/releases/download/v4.7.11/calendar-v4.7.11.tar.gz && \
+    wget -O calendar.tar.gz https://github.com/nextcloud-releases/calendar/releases/download/${CALENDAR_VERSION}/calendar-${CALENDAR_VERSION}.tar.gz && \
     tar xvfz calendar.tar.gz && \
     rm calendar.tar.gz
 
 RUN cd /usr/share/webapps/nextcloud/apps/ && \
-    wget -O contacts.tar.gz https://github.com/nextcloud-releases/contacts/releases/download/v6.0.0/contacts-v6.0.0.tar.gz && \
+    wget -O contacts.tar.gz https://github.com/nextcloud-releases/contacts/releases/download/${CONTACTS_VERSION}/contacts-${CONTACTS_VERSION}.tar.gz && \
     tar xvfz contacts.tar.gz && \
     rm contacts.tar.gz
 
 RUN cd /usr/share/webapps/nextcloud/apps/ && \
-    wget -O deck.tar.gz https://github.com/nextcloud-releases/deck/releases/download/v1.13.1/deck-v1.13.1.tar.gz && \
+    wget -O deck.tar.gz https://github.com/nextcloud-releases/deck/releases/download/${DECK_VERSION}/deck-${DECK_VERSION}.tar.gz && \
     tar xvfz deck.tar.gz && \
     rm deck.tar.gz
 
 RUN cd /usr/share/webapps/nextcloud/apps/ && \
-    wget -O richdocuments.tar.gz https://github.com/nextcloud-releases/richdocuments/releases/download/v8.4.3/richdocuments-v8.4.3.tar.gz && \
+    wget -O richdocuments.tar.gz https://github.com/nextcloud-releases/richdocuments/releases/download/${RICHDOCUMENTS_VERSION}/richdocuments-${RICHDOCUMENTS_VERSION}.tar.gz && \
     tar xvfz richdocuments.tar.gz && \
     rm richdocuments.tar.gz
 
 RUN cd /usr/share/webapps/nextcloud/apps/ && \
-    wget -O polls.tar.gz https://github.com/nextcloud/polls/releases/download/v7.1.4/polls-7.1.4.tar.gz && \
+    wget -O polls.tar.gz https://github.com/nextcloud/polls/releases/download/v${POLLS_VERSION}/polls-${POLLS_VERSION}.tar.gz && \
     tar xvfz polls.tar.gz && \
     rm polls.tar.gz
 

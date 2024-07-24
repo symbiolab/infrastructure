@@ -4,7 +4,6 @@ services:
     container_name: "traefik"
     restart: unless-stopped
     ports:
-      # The HTTP port
       - "80:80"
       - "443:443"
     volumes:
@@ -17,16 +16,18 @@ services:
       - backend
   cloudsymbiolab:
     build: ./container/cloud.symbiolab.de
-    image: cloud.symbiolab.de:latest
+    image: anytech.team:latest
     volumes:
-      - /root/docker/data/cloud.symbiolab.de-data:/opt/cloud.symbiolab.de-data
+      - /root/docker/data/anytech.team-data:/opt/nextcloud-data
+    env_file:
+      - .env
     links:
       - centraldb
       - redis
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=backend"
-      - "traefik.http.routers.cloudsymbiolab.rule=Host(`cloud.symbiolab.de`)"
+      - "traefik.http.routers.cloudsymbiolab.rule=Host(`anytech.team`)"
       - "traefik.http.routers.cloudsymbiolab.entrypoints=websecure"
       - "traefik.http.routers.cloudsymbiolab.tls.certresolver=leresolver"
       - "traefik.http.routers.cloudsymbiolab.middlewares=default@file"
@@ -40,8 +41,8 @@ services:
   centraldb:
     build: ./container/centraldb
     volumes:
-      - /root/docker/data/cloud.symbiolab.de-postgresdata:/var/lib/postgresql/data
-      - /root/docker/data/cloud.symbiolab.de-database:/opt/backup
+      - /root/docker/data/anytech.team-postgresdata:/var/lib/postgresql/data
+      - /root/docker/data/anytech.team-database:/opt/backup
     env_file:
       - .env
     networks:
