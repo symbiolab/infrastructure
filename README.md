@@ -15,7 +15,7 @@ Feel free to use it for your small Tech business, give feedback or Pull Requests
 4. build containers `docker-compose build`
 5. restrict access `touch /root/ssl/acme.json && chmod 600 /root/ssl/acme.json` on your machine
 6. Set owner to the data directory: `chown 1000:1000 /root/docker/data/anytech.team-data -R && chmod 770 -R /root/docker/data/anytech.team-data`
-7. Start the setup & log into the running conmtainer, and run the install routine: `php-legacy /usr/share/webapps/nextcloud/occ maintenance:install --database pgsql --database-name milleventures --database-host $POSTGRES_HOST --database-port 5432 --database-user nextcloud --database-pass $POSTGRES_PASSWORD --admin-user admin --admin-pass $NEXTCLOUD_ADMIN_PASSWORD --data-dir /opt/nextcloud-data`
+7. Start the setup & log into the running conmtainer, and run the install routine: `php-legacy /usr/share/webapps/nextcloud/occ maintenance:install --database pgsql --database-name nextcloud --database-host $POSTGRES_HOST --database-port 5432 --database-user nextcloud --database-pass $POSTGRES_PASSWORD --admin-user admin --admin-pass $NEXTCLOUD_ADMIN_PASSWORD --data-dir /opt/nextcloud-data`
 8. Toggling nextcloud config (`installed=true`) and rebuild containers, start up
 
 

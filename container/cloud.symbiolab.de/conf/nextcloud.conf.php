@@ -15,7 +15,7 @@ $CONFIG = array (
                     'writable' => true,
                 ),
         ),
-    'instanceid' => '',
+    'instanceid' => 'WHATEVER',
     'passwordsalt' => getenv('NEXTCLOUD_PASSWORDSALT'),
     'secret' => getenv('NEXTCLOUD_SECRET'),
     'trusted_domains' =>
@@ -44,7 +44,8 @@ $CONFIG = array (
     'dbpassword' => getenv('POSTGRES_PASSWORD'),
     'theme' => '',
     'logtimezone' => 'UTC',
-    'loglevel' => 1,
+    'loglevel' => 2,
+    'log_query' => true,
     'logfile' => '/var/www/nextcloud/nextcloud.log',
     'syslog_tag' => 'ANYTECH_TEAM_CLOUD',
     'maintenance' => false,
