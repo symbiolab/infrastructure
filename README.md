@@ -2,24 +2,27 @@
 
 Here, we share our basic infrastructure setups publicly.
 
-Feel free to use it for your small Tech business, give feedback or Pull Requests.
+Feel free to use it for your small Tech business (SME), give feedback or provide Pull Requests if you see room for improvements. 
 
+We're going to extend the setup step by step.
 
+## Howto setup (on Debian 12)
 
+1. Get some machine to run your [Nextcloud](https://nextcloud.com).
+2. Create secure and long passwords (e.g., use `pwgen -n 50`) for your environment variables and put them to an `.env` file to provide them further (do not change the last two lines): 
+```
+REDIS_PASSWORD=<PASTE HERE>
+POSTGRES_PASSWORD=<PASTE HERE>
+NEXTCLOUD_PASSWORDSALT=<PASTE HERE>
+NEXTCLOUD_SECRET=<PASTE HERE>
+NEXTCLOUD_ADMIN_PASSWORD=<PASTE HERE>
 
-## Howto setup
-
-1. get some machine
-2. install `docker` and `docker-compose`
-3. copy everything to your machine: `scp -r con* root@anytech.team:/root/docker && scp -r docker-compose.yml root@anytech.team:/root/docker && scp .env root@anytech.team:/root/docker/.env`
-4. build containers `docker-compose build`
-5. restrict access `touch /root/ssl/acme.json && chmod 600 /root/ssl/acme.json` on your machine
-6. Set owner to the data directory: `chown 1000:1000 /root/docker/data/anytech.team-data -R && chmod 770 -R /root/docker/data/anytech.team-data`
-7. Start the setup & log into the running conmtainer, and run the install routine: `php-legacy /usr/share/webapps/nextcloud/occ maintenance:install --database pgsql --database-name nextcloud --database-host $POSTGRES_HOST --database-port 5432 --database-user nextcloud --database-pass $POSTGRES_PASSWORD --admin-user admin --admin-pass $NEXTCLOUD_ADMIN_PASSWORD --data-dir /opt/nextcloud-data`
-8. Toggling nextcloud config (`installed=true`) and rebuild containers, start up
-
-
-### How to get Docker running on Debian12
+POSTGRES_USER=nextcloud
+POSTGRES_HOST=centraldb
+```
+3. Copy everything from this repo your machine: `scp -r con* root@anytech.team:/root/docker && scp -r docker-compose.yml root@anytech.team:/root/docker && scp .env root@anytech.team:/root/docker/.env`
+4. Run that complete block of code in order to set it up completely and reboot the system afterwards:
+```
 apt update
 apt upgrade -y
 apt install apt-transport-https ca-certificates curl gnupg lsb-release -y
@@ -38,5 +41,16 @@ cd /root/docker
 docker-compose build
 docker-compose up -d
 source .env
-docker-compose exec -u 1000 cloudsymbiolab bash -c "php-legacy /usr/share/webapps/nextcloud/occ maintenance:install --database pgsql --database-name milleventures --database-host $POSTGRES_HOST --database-port 5432 --database-user nextcloud --database-pass $POSTGRES_PASSWORD --admin-user admin --admin-pass $NEXTCLOUD_ADMIN_PASSWORD --data-dir /opt/nextcloud-data"
+sleep 2
+docker-compose exec -u 1000 cloudanytechteam bash -c "sed -i \"s/'installed' => true,/'installed' => false,/g\" /etc/webapps/nextcloud/config/config.php && php-legacy /usr/share/webapps/nextcloud/occ maintenance:install --database pgsql --database-name nextcloud --database-host $POSTGRES_HOST --database-port 5432 --database-user nextcloud --database-pass $POSTGRES_PASSWORD --admin-user admin --admin-pass $NEXTCLOUD_ADMIN_PASSWORD --data-dir /opt/nextcloud-data"
+docker-compose down 
+docker-compose rm -f cloudanytechteam
+reboot
+```
+5. Afterwards, login to your machine again and start the docker environment: `cd /root/docker && docker-compose up -d`
+6. You're done.
+
+## Noteworthy
+
+[Nextcloud](https://nextcloud.com) stores all data saved to the it locally on a storage device of your aforementioned machine. As this might be a virtual or shared medium, you may consider using encrypted data containers. E.g., [dm-crypt](https://gitlab.com/cryptsetup/cryptsetup/-/wikis/DMCrypt)
 

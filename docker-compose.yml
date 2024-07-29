@@ -14,7 +14,7 @@ services:
     networks:
       - frontend
       - backend
-  cloudsymbiolab:
+  cloudanytechteam:
     build: ./container/cloud.symbiolab.de
     image: anytech.team:latest
     volumes:
@@ -27,12 +27,12 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=backend"
-      - "traefik.http.routers.cloudsymbiolab.rule=Host(`anytech.team`)"
-      - "traefik.http.routers.cloudsymbiolab.entrypoints=websecure"
-      - "traefik.http.routers.cloudsymbiolab.tls.certresolver=leresolver"
-      - "traefik.http.routers.cloudsymbiolab.middlewares=default@file"
-      - "traefik.http.routers.cloudsymbiolab.middlewares=nextcloud_redirectregex"
-      - "traefik.http.services.cloudsymbiolab.loadbalancer.server.port=80"
+      - "traefik.http.routers.cloudanytechteam.rule=Host(`anytech.team`)"
+      - "traefik.http.routers.cloudanytechteam.entrypoints=websecure"
+      - "traefik.http.routers.cloudanytechteam.tls.certresolver=leresolver"
+      - "traefik.http.routers.cloudanytechteam.middlewares=default@file"
+      - "traefik.http.routers.cloudanytechteam.middlewares=nextcloud_redirectregex"
+      - "traefik.http.services.cloudanytechteam.loadbalancer.server.port=80"
       - "traefik.http.middlewares.nextcloud_redirectregex.redirectregex.permanent=true"
       - "traefik.http.middlewares.nextcloud_redirectregex.redirectregex.regex='https://(.*)/.well-known/(?:card|cal)dav'"
       - "traefik.http.middlewares.nextcloud_redirectregex.redirectregex.replacement='https://$${1}/remote.php/dav'"
