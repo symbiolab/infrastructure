@@ -42,7 +42,7 @@ docker-compose build
 docker-compose up -d
 source .env
 sleep 2
-docker-compose exec -u 1000 cloudanytechteam bash -c "sed -i \"s/'installed' => true,/'installed' => false,/g\" /etc/webapps/nextcloud/config/config.php && php-legacy /usr/share/webapps/nextcloud/occ maintenance:install --database pgsql --database-name nextcloud --database-host $POSTGRES_HOST --database-port 5432 --database-user nextcloud --database-pass $POSTGRES_PASSWORD --admin-user admin --admin-pass $NEXTCLOUD_ADMIN_PASSWORD --data-dir /opt/nextcloud-data"
+docker-compose exec -u 1000 cloudanytechteam bash -c "sed -i \"s/'installed' => true,/'installed' => false,/g\" /etc/webapps/nextcloud/config/config.php && php-legacy /usr/share/webapps/nextcloud/occ maintenance:install --database pgsql --database-name nextcloud --database-host $POSTGRES_HOST --database-port 5432 --database-user nextcloud --database-pass $POSTGRES_PASSWORD --admin-user admin --admin-pass $NEXTCLOUD_ADMIN_PASSWORD --data-dir /opt/nextcloud-data && php-legacy /usr/share/webapps/nextcloud/occ app:enable richdocuments calendar contacts deck polls"
 docker-compose down 
 docker-compose rm -f cloudanytechteam
 reboot
@@ -50,8 +50,12 @@ reboot
 5. Afterwards, login to your machine again and start the docker environment: `cd /root/docker && docker-compose up -d`
 6. You're done.
 
+## How to get collabora working?
+1. Log in to your nextcloud (`admin` with your `NEXTCLOUD_ADMIN_PASSWORD`)
+2. Click on your admin symbol on the top right, when you're logged in
+3. Then click "Administration Settings" and under "Administration" you click "Office"
+4. "Use your own server" by adding your domain, e.g., `https://office.anytech.team`
+
 ## Noteworthy
 
 [Nextcloud](https://nextcloud.com) stores all data saved to the it locally on a storage device of your aforementioned machine. As this might be a virtual or shared medium, you may consider using encrypted data containers. E.g., [dm-crypt](https://gitlab.com/cryptsetup/cryptsetup/-/wikis/DMCrypt)
-
-test
