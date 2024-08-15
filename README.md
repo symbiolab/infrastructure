@@ -9,7 +9,7 @@ We're going to extend the setup step by step.
 ## Howto setup (on Debian 12)
 
 1. Get some machine to run your [Nextcloud](https://nextcloud.com).
-2. Create secure and long passwords (e.g., use `pwgen -n 50`) for your environment variables and put them to an `.env` file to provide them further (do not change the last two lines): 
+2. Create secure and long passwords (e.g., use `pwgen -n 50`) for your environment variables and put them to an `.env` file to provide them further (do not change what is marked as DO NOT CHANGE): 
 ```
 REDIS_PASSWORD=<PASTE HERE>
 POSTGRES_PASSWORD=<PASTE HERE>
@@ -17,8 +17,17 @@ NEXTCLOUD_PASSWORDSALT=<PASTE HERE>
 NEXTCLOUD_SECRET=<PASTE HERE>
 NEXTCLOUD_ADMIN_PASSWORD=<PASTE HERE>
 
+# DO NOT CHANGE
 POSTGRES_USER=nextcloud
 POSTGRES_HOST=centraldb
+
+# for Nextcloud office: CHANGE up to your needs
+password=<PASTE HERE>
+aliasgroup1="https://anytech\.team"
+# DO NOT CHANGE
+extra_params="--o:ssl.enable=false --o:ssl.termination=true"
+dictionaries='de en'
+username=admin
 ```
 3. Copy everything from this repo your machine: `scp -r con* root@anytech.team:/root/docker && scp -r docker-compose.yml root@anytech.team:/root/docker && scp .env root@anytech.team:/root/docker/.env`
 4. Run that complete block of code in order to set it up completely and reboot the system afterwards:
