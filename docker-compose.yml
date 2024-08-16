@@ -24,6 +24,7 @@ services:
     links:
       - centraldb
       - redis
+      - proxy:office.anytech.team
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=backend"
@@ -59,6 +60,27 @@ services:
       /bin/sh -c 'redis-server --appendonly yes --requirepass $$REDIS_PASSWORD'
     env_file:
       - .env
+    networks:
+      - backend
+
+  collabora:
+    image: collabora/code:latest
+    restart: unless-stopped
+    container_name: collabora
+    cap_add:
+      - MKNOD
+    links:
+      - proxy:anytech.team
+    env_file:
+      - .env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=backend"
+      - "traefik.http.routers.collabora.rule=Host(`office.anytech.team`)"
+      - "traefik.http.routers.collabora.entrypoints=websecure"
+      - "traefik.http.routers.collabora.middlewares=collaboraHeaders@file"
+      - "traefik.http.routers.collabora.tls.certresolver=leresolver"
+      - "traefik.http.services.collabora.loadbalancer.server.port=9980"
     networks:
       - backend
 networks:
