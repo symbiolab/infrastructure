@@ -34,7 +34,7 @@ $CONFIG = array (
       ],
     'filelocking.enabled' => 'true',
     'dbtype' => 'pgsql',
-    'version' => '29.0.4.1',
+    'version' => '30.0.1.2',
     'overwriteprotocol' => 'https',
     'dbname' => 'nextcloud',
     'dbhost' => getenv('POSTGRES_HOST'),
