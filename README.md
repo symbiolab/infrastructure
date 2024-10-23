@@ -59,6 +59,13 @@ reboot
 5. Afterwards, login to your machine again and start the docker environment: `cd /root/docker && docker-compose up -d`
 6. You're done.
 
+## Howto Update (in general)
+Copy the updated files to your server, like above ``scp -r con* root@anytech.team:/root/docker && scp -r docker-compose.yml root@anytech.team:/root/docker && scp .env root@anytech.team:/root/docker/.env``
+```
+cd /root/docker
+docker-compose build --no-cache && docker-compose stop cloudanytechteam && docker-compose up -d centraldb redis collabora proxy cloudanytechteam && docker-compose exec -u 1000 cloudanytechteam php-legacy /usr/share/webapps/nextcloud/occ upgrade && docker-compose exec -u 1000 cloudanytechteam php-legacy /usr/share/webapps/nextcloud/occ app:enable richdocuments calendar contacts deck polls
+```
+
 ## How to get collabora working?
 1. Log in to your nextcloud (`admin` with your `NEXTCLOUD_ADMIN_PASSWORD`)
 2. Click on your admin symbol on the top right, when you're logged in

@@ -16,11 +16,11 @@ RUN pacman --noconfirm -S \
 
 EXPOSE 80 80
 
-ARG CALENDAR_VERSION=v4.7.11
-ARG CONTACTS_VERSION=v6.0.0
-ARG DECK_VERSION=v1.13.1
-ARG RICHDOCUMENTS_VERSION=v8.4.3
-ARG POLLS_VERSION=7.1.4
+ARG CALENDAR_VERSION=v5.0.1
+ARG CONTACTS_VERSION=v6.1.0
+ARG DECK_VERSION=v1.14.1
+ARG RICHDOCUMENTS_VERSION=v8.5.2
+ARG POLLS_VERSION=v7.2.4
 
 RUN cd /usr/share/webapps/nextcloud/apps/ && \
     wget -O calendar.tar.gz https://github.com/nextcloud-releases/calendar/releases/download/${CALENDAR_VERSION}/calendar-${CALENDAR_VERSION}.tar.gz && \
@@ -43,7 +43,7 @@ RUN cd /usr/share/webapps/nextcloud/apps/ && \
     rm richdocuments.tar.gz
 
 RUN cd /usr/share/webapps/nextcloud/apps/ && \
-    wget -O polls.tar.gz https://github.com/nextcloud/polls/releases/download/v${POLLS_VERSION}/polls-${POLLS_VERSION}.tar.gz && \
+    wget -O polls.tar.gz https://github.com/nextcloud/polls/archive/refs/tags/${POLLS_VERSION}.tar.gz && \
     tar xvfz polls.tar.gz && \
     rm polls.tar.gz
 
