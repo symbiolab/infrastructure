@@ -15,7 +15,7 @@ services:
       - frontend
       - backend
   cloudanytechteam:
-    build: ./container/cloud.symbiolab.de
+    build: ./container/cloud.anytech.tech
     image: anytech.team:latest
     volumes:
       - /root/docker/data/anytech.team-data:/opt/nextcloud-data
